@@ -16,6 +16,8 @@ Implicancia de la clave hardcodeada:
   - En producción real se usaría ECDH o RSA para intercambio dinámico
 """
 
+import os
+
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 
 # Clave de 32 bytes = 256 bits. Hardcodeada para este entorno controlado.
@@ -43,7 +45,7 @@ def encrypt(plaintext: bytes) -> bytes:
         bytes: nonce + ciphertext + tag concatenados
     """
     aesgcm = AESGCM(KEY)
-    nonce = AESGCM.generate_key(bit_length=96)[:12]  # 12 bytes = 96 bits
+    nonce  = os.urandom(12)          # ← 12 bytes aleatorios del SO, no generate_key
     ciphertext = aesgcm.encrypt(nonce, plaintext, None)
     return nonce + ciphertext  # GCM incluye el tag al final del ciphertext
 

